@@ -5,8 +5,12 @@ import {
   testController,
   forgotPasswordController,
   updateProfileController,
+  getOrdersController,
+  getAllOrdersController,
+  orderStatusController,
+  
 } from "../controller/authController.js";
-import {  requireSignIn , isAdmin} from "../middleware/authMiddleware.js";
+import { requireSignIn, isAdmin } from "../middleware/authMiddleware.js";
 
 // router object
 const router = express.Router();
@@ -23,19 +27,28 @@ router.post("/login", loginController);
 router.post("/forgot-password", forgotPasswordController);
 
 //test route
-router.get("/test",requireSignIn, isAdmin, testController);
+router.get("/test", requireSignIn, isAdmin, testController);
 
 //producted user routes
-router.get('/user-auth', requireSignIn, (req,res)=>{
-  res.status(200).send({ok: true});
+router.get('/user-auth', requireSignIn, (req, res) => {
+  res.status(200).send({ ok: true });
 })
 
 //producted admin routes
-router.get('/admin-auth', requireSignIn, isAdmin, (req,res)=>{
-  res.status(200).send({ok: true});
+router.get('/admin-auth', requireSignIn, isAdmin, (req, res) => {
+  res.status(200).send({ ok: true });
 })
 
 //update profile
 router.put("/profile", requireSignIn, updateProfileController);
+
+//orders
+router.get("/orders", requireSignIn, getOrdersController);
+
+//all orders
+router.get("/all-orders", requireSignIn, isAdmin, getAllOrdersController);
+
+// order status update
+router.put("/order-status/:orderId",requireSignIn, isAdmin, orderStatusController);
 
 export default router;
